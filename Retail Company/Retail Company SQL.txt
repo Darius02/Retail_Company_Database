@@ -1,0 +1,468 @@
+--Boroseanu Darius-Ilie 244
+
+--4
+
+CREATE TABLE PERSONAL ( 
+    id_personal NUMBER(5) NOT NULL PRIMARY KEY,
+    nume VARCHAR2(20) NOT NULL,
+    prenume VARCHAR2(20) NOT NULL 
+    rol VARCHAR2(30) NOT NULL,
+    adresa VARCHAR2(3) NOT NULL,
+    telefon NUMBER(15) UNIQUE, 
+    credit NUMBER(10)    
+);
+
+CREATE TABLE COMENZI (
+	id_comanda NUMBER(5) NOT NULL PRIMARY KEY,
+	status VARCHAR2(15) NOT NULL,
+	data_comanda DATE DEFAULT SYSDATE,
+	FOREIGN KEY (id_personal) REFERENCES PERSONAL(id_personal)
+);
+
+CREATE TABLE CATEGORII(
+	id_categorie NUMBER(5) NOT NULL constraint pkey_cat PRIMARY KEY,
+	nume_categorie VARCHAR(30) NOT NULL,
+	id_manager constraint fkey_per REFERENCES PERSONAL(id_personal)
+);
+
+CREATE TABLE PRODUSE(
+	id_produs NUMBER(5) NOT NULL constraint pkey_pro PRIMARY KEY,
+	nume_produs VARCHAR(30) NOT NULL,
+	descriere VARCHAR(255) NOT NULL,
+	pret NUMBER(10) NOT NULL,
+	cantitate NUMBER(5) NOT NULL,
+	id_categorie constraint fkey_cat REFERENCES CATEGORII(id_categorie),
+	id_distribuitor constraint fkey_per2 REFERENCES PERSONAL(id_personal)
+);
+
+CREATE TABLE RECENZII(
+	id_recenzie NUMBER(5) NOT NULL constraint pkey_rec PRIMARY KEY,
+	continut VARCHAR(255),
+	calificativ NUMBER(5),
+	id_personal constraint fkey_per REFERENCES PERSONAL(id_personal),
+	id_produs constraint fkey_pro REFERENCES PRODUSE(id_produs)
+);
+
+CREATE TABLE PRODUSE_COMANDA(
+	id_personal constraint fkey_per4 REFERENCES PERSONAL(id_personal),
+	id_produs constraint fkey_pro1 REFERENCES PRODUSE(id_produs),
+	id_comanda constraint fkey_com REFERENCES COMENZI(id_comanda),
+    	cantitate_pc NUMBER(5) NOT NULL
+);
+
+--5
+
+INSERT INTO PERSONAL VALUES (1, 'Boroseanu', 'Darius', 'MANAGER', 'Bl. Gheorghe Magheru 17A', 899888, 0);
+
+INSERT INTO PERSONAL VALUES (2, 'Popescu', 'Cristian', 'CLIENT', 'Strada Florilor 15', 524523, 500);
+
+INSERT INTO PERSONAL VALUES (3, 'Popa', 'Ionut', 'CLIENT', 'Strada Muncii 21', 714935, 450);
+
+INSERT INTO PERSONAL VALUES (4, 'Dumitru', 'Alexandru', 'DISTRIBUITOR', 'Aleea Parcului 7', 355892, 0);
+
+INSERT INTO PERSONAL VALUES (5, 'Lazar', 'George', 'CLIENT', 'Strada Viitorului 12', 873521, 700);
+
+INSERT INTO PERSONAL VALUES (6, 'Petrescu', 'Constantin', 'CLIENT', 'Strada Izvoarelor 98', 633349, 800);
+
+INSERT INTO PERSONAL VALUES (7, 'Ene', 'Catalin', 'DISTRIBUITOR', 'Strada Planetelor 19', 837125, 0);
+
+INSERT INTO PERSONAL VALUES (8, 'Banciu', 'Radu', 'MANAGER', 'Strada Franceza 1', 912548, 0);
+
+
+
+INSERT INTO COMENZI VALUES (1, 'Plasata', to_date('25-03-2019','dd-mm-yyyy'), 2);
+
+INSERT INTO COMENZI VALUES (2, 'Plasata', to_date('02-10-2020','dd-mm-yyyy'), 5);
+
+INSERT INTO COMENZI VALUES (3, 'Livrata', to_date('19-04-2018','dd-mm-yyyy'), 6);
+
+INSERT INTO COMENZI VALUES (4, 'Livrata', to_date('17-11-2021','dd-mm-yyyy'), 3);
+
+INSERT INTO COMENZI VALUES (5, 'Procesata', to_date('01-07-2020','dd-mm-yyyy'), 3);
+
+INSERT INTO COMENZI VALUES (6, 'Plasata', to_date('10-04-2022','dd-mm-yyyy'), 6);
+
+INSERT INTO COMENZI VALUES (7, 'Procesata', to_date('09-05-2022','dd-mm-yyyy'), 5);
+
+INSERT INTO COMENZI VALUES (8, 'Livrata', to_date('17-12-2019','dd-mm-yyyy'), 5);
+
+INSERT INTO COMENZI VALUES (9, 'Procesata', to_date('10-01-2022','dd-mm-yyyy'), 2);
+
+INSERT INTO COMENZI VALUES (10, 'Livrata', to_date('07-02-2021','dd-mm-yyyy'), 6);
+
+INSERT INTO COMENZI VALUES (11, 'Livrata', to_date('11-10-2021','dd-mm-yyyy'), 6);
+
+INSERT INTO COMENZI VALUES (12, 'Plasata', to_date('20-03-2022','dd-mm-yyyy'), 3);
+
+
+
+INSERT INTO CATEGORII VALUES (1, 'Imbracaminte', 1);
+
+INSERT INTO CATEGORII VALUES (2, 'Accesorii', 1);
+
+INSERT INTO CATEGORII VALUES (3, 'Incaltaminte', 1);
+
+INSERT INTO CATEGORII VALUES (4, 'Electrocasince', 8);
+
+INSERT INTO CATEGORII VALUES (5, 'Papetarie', 8);
+
+
+
+INSERT INTO PRODUSE VALUES (1, 'Tricou', 'Bumbac', 20, 30, 1, 4);
+
+INSERT INTO PRODUSE VALUES (2, 'Jacheta', 'De vara', 60, 10, 1, 4);
+
+INSERT INTO PRODUSE VALUES (3, 'Pantaloni', 'Lungi', 45, 15, 1, 4);
+
+INSERT INTO PRODUSE VALUES (4, 'Bluza', 'Subtire', 37, 20, 1, 4);
+
+INSERT INTO PRODUSE VALUES (5, 'Papion', 'Rosu', 15, 45, 2, 4);
+
+INSERT INTO PRODUSE VALUES (6, 'Cravata', 'Scurta', 22, 50, 2, 4);
+
+INSERT INTO PRODUSE VALUES (7, 'Adidasi', 'Sport', 100, 55, 3, 4);
+
+INSERT INTO PRODUSE VALUES (8, 'Pantofi', 'Eleganti', 120, 70, 3, 4);
+
+INSERT INTO PRODUSE VALUES (9, 'Frigider', 'Clasa A+++', 550, 10, 4, 7);
+
+INSERT INTO PRODUSE VALUES (10, 'Aragaz', 'Electric', 450, 12, 4, 7);
+
+INSERT INTO PRODUSE VALUES (11, 'Caiet', 'Dictando', 5, 200, 5, 7);
+
+INSERT INTO PRODUSE VALUES (12, 'Pix', 'Cu gel', 3, 500, 5, 7);
+
+
+
+INSERT INTO RECENZII VALUES (1, 'Foarte calitativ!', 5, 2, 1);
+
+INSERT INTO RECENZII VALUES (2, 'Ok pentru pretul sau.', 4, 3, 2);
+
+INSERT INTO RECENZII VALUES (3, 'O varietate larga de marimi.', 5, 3, 3);
+
+INSERT INTO RECENZII VALUES (4, 'Material slab calitativ.', 3, 6, 4);
+
+INSERT INTO RECENZII VALUES (5, 'Nimic de reprosat!', 5, 5, 5);
+
+INSERT INTO RECENZII VALUES (6, 'Impecabili!', 5, 2, 7);
+
+INSERT INTO RECENZII VALUES (7, 'Instructiuni neintuitive.', 2, 3, 10);
+
+INSERT INTO RECENZII VALUES (8, 'Culoarea negru arata bine.', 4, 6, 1);
+
+
+INSERT INTO PRODUSE_COMANDA VALUES (2, 3, 1, 1);
+
+INSERT INTO PRODUSE_COMANDA VALUES (2, 4, 1, 2);
+
+INSERT INTO PRODUSE_COMANDA VALUES (2, 7, 1, 1);
+
+INSERT INTO PRODUSE_COMANDA VALUES (3, 1, 2, 2);
+
+INSERT INTO PRODUSE_COMANDA VALUES (3, 2, 2, 1);
+
+INSERT INTO PRODUSE_COMANDA VALUES (5, 5, 3, 2);
+
+INSERT INTO PRODUSE_COMANDA VALUES (5, 6, 3, 3);
+
+INSERT INTO PRODUSE_COMANDA VALUES (5, 9, 4, 1);
+
+INSERT INTO PRODUSE_COMANDA VALUES (5, 10, 4, 1);
+
+INSERT INTO PRODUSE_COMANDA VALUES (6, 11, 5, 10);
+
+INSERT INTO PRODUSE_COMANDA VALUES (6, 12, 5, 15);
+
+INSERT INTO PRODUSE_COMANDA VALUES (3, 8, 6, 2);
+
+
+
+
+--6
+
+CREATE OR REPLACE PROCEDURE ex6(val PRODUSE.pret%TYPE) 
+    IS 
+        TYPE tbl_idx IS TABLE OF PRODUSE%ROWTYPE 
+            INDEX BY PLS_INTEGER; 
+        prod tbl_idx; 
+BEGIN 
+    SELECT * BULK COLLECT INTO prod
+    FROM PRODUSE 
+    WHERE pret > val 
+    ORDER BY pret; 
+    FOR i in prod.first..prod.last LOOP  
+        DBMS_OUTPUT.PUT_LINE(prod(i).id_produs || '  ' || prod(i).nume_produs || '  ' || prod(i).pret );  
+    END LOOP; 
+END; 
+/
+
+DECLARE 
+    val PRODUSE.pret%TYPE := 30; 
+BEGIN 
+    ex6(val); 
+END; 
+/
+
+
+--7
+
+CREATE OR REPLACE PROCEDURE ex7 
+IS 
+    CURSOR C IS 
+        SELECT nume_categorie nume, COUNT(id_produs) nr 
+        FROM CATEGORII c, PRODUSE p 
+        WHERE c.id_categorie = p.id_categorie(+) 
+        GROUP BY nume_categorie
+        ORDER BY nume_categorie; 
+    nume CATEGORII.nume_categorie%type; 
+    nr int; 
+BEGIN 
+    OPEN C; 
+    LOOP 
+        FETCH C INTO nume, nr; 
+        EXIT WHEN C%NOTFOUND; 
+        IF (nr = 0) THEN 
+            DBMS_OUTPUT.PUT_LINE('Categoria ' || nume || ' nu contine produse.'); 
+        ELSIF (nr = 1) THEN 
+            DBMS_OUTPUT.PUT_LINE('Categoria ' || nume || ' contine doar un produs.'); 
+        ELSE 
+            DBMS_OUTPUT.PUT_LINE('Categoria ' || nume || ' contine ' || nr || ' produse.'); 
+        END IF; 
+    END LOOP; 
+END; 
+/
+
+BEGIN 
+    ex7; 
+END; 
+/
+
+
+--8
+
+CREATE OR REPLACE FUNCTION ex8(categ CATEGORII.nume_categorie%type) 
+RETURN INTEGER IS 
+    TYPE vector IS VARRAY(20) OF NUMBER(4); 
+    prod vector; 
+    nr NUMBER(4);
+    maxi NUMBER(4);
+    aux NUMBER(4); 
+    id_cat CATEGORII.id_categorie%type; 
+    nu_exista EXCEPTION; 
+    e_goala EXCEPTION; 
+    fara_recenzii EXCEPTION; 
+BEGIN 
+    nr := 0; 
+    SELECT COUNT(nume_categorie) into nr 
+    FROM CATEGORII 
+    WHERE nume_categorie = categ; 
+     
+    IF (nr = 0) THEN RAISE nu_exista;
+    END IF; 
+    nr := 0; 
+     
+    SELECT id_categorie into id_cat 
+    FROM CATEGORII 
+    WHERE nume_categorie = categ; 
+     
+    SELECT count(*) INTO nr 
+    FROM PRODUSE 
+    WHERE id_categorie = id_cat; 
+     
+    IF (nr = 0) THEN RAISE e_goala; 
+    END IF; 
+     
+    SELECT id_produs BULK COLLECT INTO prod 
+    FROM PRODUSE 
+    WHERE id_categorie = id_cat; 
+     
+     
+    maxi := 0;
+    FOR i in prod.first..prod.last LOOP 
+        aux := 0; 
+        SELECT COUNT(*) into aux 
+        FROM RECENZII 
+        WHERE id_produs = prod(i); 
+        IF (aux > maxi) THEN 
+            maxi := aux; 
+        END IF; 
+    END LOOP; 
+     
+    IF (maxi = 0) THEN RAISE fara_recenzii; 
+    END IF; 
+     
+    RETURN maxi; 
+     
+    EXCEPTION 
+        WHEN nu_exista THEN 
+            DBMS_OUTPUT.PUT_LINE('Categoria introdusă nu există în cadrul companiei.'); 
+            RETURN -1; 
+        WHEN e_goala THEN 
+            DBMS_OUTPUT.PUT_LINE('Din categoria introdusă nu face parte niciun produs.'); 
+            RETURN -1; 
+        WHEN fara_recenzii THEN 
+            DBMS_OUTPUT.PUT_LINE('În categoria introdusă, niciun produs nu a primit înca vreo recenzie.'); 
+            RETURN -1; 
+END; 
+/
+
+BEGIN 
+    DBMS_OUTPUT.PUT_LINE(ex8('Imbracaminte')); 
+END;
+/
+
+
+--9
+
+CREATE OR REPLACE PROCEDURE ex9(nume1 PERSONAL.nume%type , prenume1 PERSONAL.prenume%type) 
+IS 
+    TYPE tbl_idx IS TABLE OF PRODUSE_COMANDA%ROWTYPE 
+                            INDEX BY PLS_INTEGER; 
+    TYPE tbl_idx2 is TABLE OF CATEGORII%ROWTYPE 
+                            INDEX BY PLS_INTEGER; 
+    nr_id tbl_idx; 
+    cat tbl_idx2; 
+    TYPE vector IS VARRAY(40) OF CATEGORII.id_categorie%TYPE; 
+    cat_tbl vector; 
+    nume_cat CATEGORII.nume_categorie%TYPE; 
+    aux number(4); 
+    id_pers PERSONAL.id_personal%type := '-1'; 
+    nu_exista_comenzi_livrate EXCEPTION; 
+BEGIN 
+    aux := 0; 
+     
+    SELECT id_personal into id_pers 
+    FROM PERSONAL 
+    WHERE nume = nume1 AND prenume = prenume1; 
+     
+    SELECT pc.id_personal, pc.id_produs, pc.id_comanda, pc.cantitate_pc BULK COLLECT INTO nr_id 
+    FROM PRODUSE_COMANDA pc, COMENZI cmz 
+    WHERE pc.id_personal = id_pers AND NVL(pc.id_comanda, 0) = cmz.id_comanda 
+        AND cmz.status ='Livrata'; 
+     
+    IF (nr_id.count = 0) THEN RAISE nu_exista_comenzi_livrate; 
+    END IF; 
+     
+    SELECT * BULK COLLECT INTO cat 
+    FROM CATEGORII; 
+     
+    cat_tbl := VECTOR(); 
+    FOR i IN nr_id.FIRST..nr_id.LAST LOOP 
+        SELECT id_categorie INTO NUME_CAT 
+        FROM PRODUSE 
+        WHERE nr_id(i).id_produs = id_produs; 
+        cat_tbl.EXTEND(); 
+        cat_tbl(i) := NUME_CAT; 
+    END LOOP; 
+     
+    FOR i IN CAT.FIRST..CAT.LAST LOOP 
+        aux := 0; 
+        FOR j IN cat_tbl.FIRST..cat_tbl.LAST LOOP 
+            IF (CAT(i).id_categorie = cat_tbl(j)) THEN 
+                aux := aux + 1; 
+            END IF; 
+        END LOOP; 
+         
+        IF (AUX != 0) THEN  
+            DBMS_OUTPUT.PUT(CAT(I).nume_categorie || ' '); 
+            AUX := 0; 
+            FOR j IN cat_tbl.FIRST..cat_tbl.LAST LOOP 
+                IF (CAT(i).id_categorie = cat_tbl(j)) THEN 
+                    AUX := AUX + nr_id(j).cantitate_pc; 
+                END IF; 
+            END LOOP; 
+            DBMS_OUTPUT.PUT(AUX); 
+            DBMS_OUTPUT.PUT_LINE(''); 
+        END IF; 
+    END LOOP; 
+     
+    EXCEPTION 
+        WHEN NO_DATA_FOUND THEN 
+            DBMS_OUTPUT.PUT_LINE('Nu a fost gasit un client cu acest nume.'); 
+        WHEN nu_exista_comenzi_livrate THEN 
+            DBMS_OUTPUT.PUT_LINE('Clientul nu are comenzi livrate.'); 
+END;
+/
+
+BEGIN 
+    ex9('Lazar', 'George'); 
+END;
+/
+
+
+--10
+
+CREATE OR REPLACE TRIGGER ex10
+    BEFORE INSERT OR UPDATE OR DELETE ON PRODUSE
+BEGIN
+    IF (to_char(sysdate, 'dd') = 01) AND (to_char(sysdate, 'mm') = 05)
+        THEN raise_application_error(-20001, 'Nu se lucreaza de 1 Mai!');
+    ELSIF (to_char(sysdate,'D') = 6) OR (to_char(sysdate,'D') = 7)
+        THEN raise_application_error(-20002, 'Nu se lucreaza in weekend!');
+    END IF;
+END;
+/
+
+
+--11
+
+CREATE OR REPLACE TRIGGER ex11 
+    BEFORE UPDATE OF pret ON PRODUSE 
+    FOR EACH ROW 
+BEGIN 
+    IF (:NEW.pret > 1.5 * :OLD.pret) OR (:NEW.pret < 0.5 * :OLD.pret) THEN 
+        RAISE_APPLICATION_ERROR(-20002,'Nu se poate modifica pretul unui produs cu mai mult de 50%'); 
+    END IF; 
+END; 
+/
+
+
+--12
+
+CREATE TABLE sys_log
+    (nume VARCHAR2(20),
+     nume_bd VARCHAR2(30),
+     actiune VARCHAR2(20),
+     nume_obiect VARCHAR2(30),
+     data_actiune DATE
+);
+
+CREATE OR REPLACE TRIGGER ex12
+    BEFORE CREATE OR ALTER OR DROP ON SCHEMA
+BEGIN
+    INSERT INTO sys_log VALUES (sys.login_user, sys.database_name, sys.sysevent, sys.dictionary_obj_name, sysdate);
+END;
+/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
